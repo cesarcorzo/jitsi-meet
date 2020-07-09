@@ -6,9 +6,11 @@ import React, { Component } from 'react';
 import { getRoomName } from '../../base/conference';
 import { translate } from '../../base/i18n';
 import { Icon, IconPhone, IconVolumeOff } from '../../base/icons';
+import { isVideoMutedByUser } from '../../base/media';
 import { ActionButton, InputField, PreMeetingScreen } from '../../base/premeeting';
 import { connect } from '../../base/redux';
 import { getDisplayName, updateSettings } from '../../base/settings';
+import { getLocalJitsiVideoTrack } from '../../base/tracks';
 import {
     joinConference as joinConferenceAction,
     joinConferenceWithoutAudio as joinConferenceWithoutAudioAction,
@@ -16,11 +18,10 @@ import {
     setJoinByPhoneDialogVisiblity as setJoinByPhoneDialogVisiblityAction
 } from '../actions';
 import {
-    getActiveVideoTrack,
-    isJoinByPhoneButtonVisible,
     isDeviceStatusVisible,
-    isJoinByPhoneDialogVisible,
-    isPrejoinVideoMuted
+    isDisplayNameRequired,
+    isJoinByPhoneButtonVisible,
+    isJoinByPhoneDialogVisible
 } from '../functions';
 
 import JoinByPhoneDialog from './dialogs/JoinByPhoneDialog';
@@ -37,6 +38,11 @@ type Props = {
      * If join by phone button should be visible.
      */
     hasJoinByPhoneButton: boolean,
+
+    /**
+     * If join button is disabled or not.
+     */
+    joinButtonDisabled: boolean,
 
     /**
      * Joins the current meeting.
@@ -212,6 +218,7 @@ class Prejoin extends Component<Props, State> {
      */
     render() {
         const {
+            joinButtonDisabled,
             hasJoinByPhoneButton,
             joinConference,
             joinConferenceWithoutAudio,
@@ -228,6 +235,7 @@ class Prejoin extends Component<Props, State> {
         return (
             <PreMeetingScreen
                 footer = { this._renderFooter() }
+                name = { name }
                 title = { t('prejoin.joinMeeting') }
                 videoMuted = { !showCameraPreview }
                 videoTrack = { videoTrack }>
@@ -264,7 +272,7 @@ class Prejoin extends Component<Props, State> {
                                 isOpen = { showJoinByPhoneButtons }
                                 onClose = { _onDropdownClose }>
                                 <ActionButton
-                                    disabled = { !name }
+                                    disabled = { joinButtonDisabled }
                                     hasOptions = { true }
                                     onClick = { joinConference }
                                     onOptionsClick = { _onOptionsClick }
@@ -309,14 +317,18 @@ class Prejoin extends Component<Props, State> {
  * @returns {Object}
  */
 function mapStateToProps(state): Object {
+    const name = getDisplayName(state);
+    const joinButtonDisabled = isDisplayNameRequired(state) && !name;
+
     return {
+        joinButtonDisabled,
+        name,
         deviceStatusVisible: isDeviceStatusVisible(state),
-        name: getDisplayName(state),
         roomName: getRoomName(state),
         showDialog: isJoinByPhoneDialogVisible(state),
         hasJoinByPhoneButton: isJoinByPhoneButtonVisible(state),
-        showCameraPreview: !isPrejoinVideoMuted(state),
-        videoTrack: getActiveVideoTrack(state)
+        showCameraPreview: !isVideoMutedByUser(state),
+        videoTrack: getLocalJitsiVideoTrack(state)
     };
 }
 

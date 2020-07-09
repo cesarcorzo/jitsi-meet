@@ -44,6 +44,10 @@ var config = {
     //
 
     testing: {
+        // Disables the End to End Encryption feature. Useful for debugging
+        // issues related to insertable streams.
+        // disableE2EE: false,
+
         // P2P test mode disables automatic switching to P2P when there are 2
         // participants in the conference.
         p2pTestMode: false
@@ -153,22 +157,6 @@ var config = {
     // disableH264: false,
 
     // Desktop sharing
-
-    // The ID of the jidesha extension for Chrome.
-    desktopSharingChromeExtId: null,
-
-    // Whether desktop sharing should be disabled on Chrome.
-    // desktopSharingChromeDisabled: false,
-
-    // The media sources to use when using screen sharing with the Chrome
-    // extension.
-    desktopSharingChromeSources: [ 'screen', 'window', 'tab' ],
-
-    // Required version of Chrome extension
-    desktopSharingChromeMinExtVersion: '0.1',
-
-    // Whether desktop sharing should be disabled on Firefox.
-    // desktopSharingFirefoxDisabled: false,
 
     // Optional desktop sharing frame rate options. Default value: min:5, max:5.
     // desktopSharingFrameRate: {
@@ -319,7 +307,7 @@ var config = {
     // and microsoftApiApplicationClientID
     // enableCalendarIntegration: false,
 
-    // When 'true', it shows an intermediate page before joining, where the user can  configure its devices.
+    // When 'true', it shows an intermediate page before joining, where the user can configure their devices.
     // prejoinPageEnabled: false,
 
     // If true, shows the unsafe roon name warning label when a room name is
@@ -344,10 +332,10 @@ var config = {
     // callStatsID: '',
     // callStatsSecret: '',
 
-    // enables sending participants display name to callstats
+    // Enables sending participants' display names to callstats
     // enableDisplayNameInStats: false,
 
-    // enables sending participants email if available to callstats and other analytics
+    // Enables sending participants' emails (if available) to callstats and other analytics
     // enableEmailInStats: false,
 
     // Privacy
@@ -377,7 +365,7 @@ var config = {
         // The STUN servers that will be used in the peer to peer connections
         stunServers: [
 
-            // { urls: 'stun:jitsi-meet.example.com:4446' },
+            // { urls: 'stun:jitsi-meet.example.com:3478' },
             { urls: 'stun:meet-jit-si-turnrelay.jitsi.net:443' }
         ]
 
@@ -533,6 +521,11 @@ var config = {
      }
     */
     // brandingDataUrl: '',
+
+    // The URL of the moderated rooms microservice, if available. If it
+    // is present, a link to the service will be rendered on the welcome page,
+    // otherwise the app doesn't render it.
+    // moderatedRoomServiceUrl: 'https://moderated.jitsi-meet.example.com',
 
     // List of undocumented settings used in jitsi-meet
     /**

@@ -369,6 +369,9 @@ function initCommands() {
         case 'is-video-available':
             callback(videoAvailable);
             break;
+        case 'is-sharing-screen':
+            callback(Boolean(APP.conference.isSharingScreen));
+            break;
         default:
             return false;
         }
