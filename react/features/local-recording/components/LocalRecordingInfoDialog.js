@@ -352,6 +352,7 @@ class LocalRecordingInfoDialog extends Component<Props, State> {
      * @returns {void}
      */
     _onStart() {
+        console.log("react-features->local-recording->components->localreco..infoDialog.js => _onStart()");
         recordingController.startRecording();
     }
 

@@ -276,6 +276,7 @@ class RecordingController {
      * @returns {void}
      */
     startRecording() {
+        console.log("react->features->local-recording->controller->RecordingController.js => startRecording()");
         this.registerEvents();
         if (this._conference && this._conference.isModerator()) {
             this._conference.removeCommand(COMMAND_STOP);

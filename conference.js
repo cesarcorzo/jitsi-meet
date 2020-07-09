@@ -16,6 +16,7 @@ import {
     createStartSilentEvent,
     createScreenSharingEvent,
     createTrackMutedEvent,
+    createRecordingDialogEvent,
     sendAnalytics
 } from './react/features/analytics';
 import {
@@ -43,8 +44,15 @@ import {
     onStartMutedPolicyChanged,
     p2pStatusChanged,
     sendLocalParticipant,
-    setDesktopSharingEnabled
+    setDesktopSharingEnabled,
+    getCurrentConference
 } from './react/features/base/conference';
+import { 
+    getActiveSession 
+} from './react/features/recording/functions';
+import {
+    RECORDING_TYPES
+} from './react/features/recording/constants';
 import {
     checkAndNotifyForNewDevice,
     getAvailableDevices,
@@ -63,7 +71,8 @@ import {
     JitsiMediaDevicesEvents,
     JitsiParticipantConnectionStatus,
     JitsiTrackErrors,
-    JitsiTrackEvents
+    JitsiTrackEvents,
+    JitsiRecordingConstants
 } from './react/features/base/lib-jitsi-meet';
 import {
     isVideoMutedByUser,
@@ -263,6 +272,63 @@ const _replaceLocalAudioTrackQueue = createTaskQueue();
  */
 const _replaceLocalVideoTrackQueue = createTaskQueue();
 
+/** 
+ * DELTA BRIDGE FUNCTIONS!!
+ * 
+*/
+
+function startRecording(){
+    console.log("/////////////////////////////////////");
+    const state = APP.store.getState();
+    const conf = getCurrentConference(state);
+    let appData = JSON.stringify({
+        'file_recording_metadata': {
+            'share': true
+        }
+    });
+
+    let recordingConfig = {
+        mode: JitsiRecordingConstants.mode.FILE,
+        appData
+    };
+
+    const attributes = {
+        type: RECORDING_TYPES.JITSI_REC_SERVICE
+    };
+
+    sendAnalytics(
+        createRecordingDialogEvent('start', 'confirm.button', attributes)
+    );
+
+    conf.startRecording(recordingConfig);
+    console.log("/////////////////////////////////////");
+}
+
+function stopRecording(){
+    const state = APP.store.getState();
+    const conference = getCurrentConference(state);
+
+    if (!conference) {
+        logger.error('Conference is not defined');
+
+        return;
+    }
+
+    if (![ JitsiRecordingConstants.mode.FILE, JitsiRecordingConstants.mode.STREAM ].includes(mode)) {
+        logger.error('Invalid recording mode provided!');
+
+        return;
+    }
+
+    const activeSession = getActiveSession(state, mode);
+
+    if (activeSession && activeSession.id) {
+        conference.stopRecording(activeSession.id);
+    } else {
+        logger.error('No recording or streaming session found');
+    }
+}
+
 /**
  *
  */
@@ -387,7 +453,16 @@ class ConferenceConnector {
      *
      */
     _handleConferenceJoined() {
+        console.log("conference joined handler");
         this._unsubscribe();
+        let count = room.getParticipants().length;
+        console.log("count: "+count);
+        if(count === 0){
+            console.log("start recording...");
+            //startRecording();
+        } else {
+            console.log("no recording...");
+        }
         this._resolve();
     }
 
@@ -661,6 +736,8 @@ export default {
     },
 
     startConference(con, tracks) {
+        console.log("conference.js => startConference");
+        console.log(tracks);
         tracks.forEach(track => {
             if ((track.isAudioTrack() && this.isLocalAudioMuted())
                 || (track.isVideoTrack() && this.isLocalVideoMuted())) {
@@ -716,7 +793,10 @@ export default {
         // XXX The API will take care of disconnecting from the XMPP
         // server (and, thus, leaving the room) on unload.
         return new Promise((resolve, reject) => {
+            console.log("end with promise => startConference");
             (new ConferenceConnector(resolve, reject)).connect();
+            console.log("after connect");
+            
         });
     },
 
@@ -729,6 +809,7 @@ export default {
      * @returns {Promise}
      */
     async init({ roomName }) {
+        console.log("conference init");
         const initialOptions = {
             startAudioOnly: config.startAudioOnly,
             startScreenSharing: config.startScreenSharing,
@@ -783,6 +864,7 @@ export default {
      * @returns {Promise}
      */
     async prejoinStart(tracks) {
+        console.log("conference prejoin");
         const con = await _connectionPromise;
 
         return this.startConference(con, tracks);

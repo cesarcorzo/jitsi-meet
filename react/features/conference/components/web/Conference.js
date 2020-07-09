@@ -245,6 +245,7 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     _start() {
+        console.log("react->features->conference->components->web->conference.js => _start()");
         APP.UI.start();
 
         APP.UI.registerListeners();
@@ -261,6 +262,7 @@ class Conference extends AbstractConference<Props, *> {
 
         interfaceConfig.filmStripOnly
             && dispatch(setToolboxAlwaysVisible(true));
+        console.log("end => _start()");
     }
 }
 

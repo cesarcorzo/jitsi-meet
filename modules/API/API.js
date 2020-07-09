@@ -213,6 +213,7 @@ function initCommands() {
          * @returns {void}
          */
         'start-recording': ({ mode, dropboxToken, shouldShare, youtubeStreamKey, youtubeBroadcastID }) => {
+            console.log("API.js->initCommand=>start-recording");
             const state = APP.store.getState();
             const conference = getCurrentConference(state);
 

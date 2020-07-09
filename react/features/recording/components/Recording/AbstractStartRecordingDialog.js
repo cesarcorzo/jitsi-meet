@@ -247,6 +247,7 @@ class AbstractStartRecordingDialog extends Component<Props, State> {
      * @returns {boolean} - True (to note that the modal should be closed).
      */
     _onSubmit() {
+        console.log("_onSubmit")
         const { _autoCaptionOnRecord, _conference, _isDropboxEnabled, _token, dispatch } = this.props;
         let appData;
         const attributes = {};

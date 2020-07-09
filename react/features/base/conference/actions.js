@@ -406,6 +406,7 @@ export function conferenceWillLeave(conference: Object) {
  */
 export function createConference() {
     return (dispatch: Function, getState: Function) => {
+        console.log("react->features->base->conference->action.js => createConference()");
         const state = getState();
         const { connection, locationURL } = state['features/base/connection'];
 
