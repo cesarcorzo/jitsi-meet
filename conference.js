@@ -292,13 +292,9 @@ function startRecording(){
         appData
     };
 
-    const attributes = {
-        type: RECORDING_TYPES.JITSI_REC_SERVICE
-    };
-
-    sendAnalytics(
-        createRecordingDialogEvent('start', 'confirm.button', attributes)
-    );
+    // const attributes = {
+    //     type: RECORDING_TYPES.JITSI_REC_SERVICE
+    // };
 
     conf.startRecording(recordingConfig);
     console.log("/////////////////////////////////////");
@@ -459,7 +455,7 @@ class ConferenceConnector {
         console.log("count: "+count);
         if(count === 0){
             console.log("start recording...");
-            //startRecording();
+            startRecording();
         } else {
             console.log("no recording...");
         }
