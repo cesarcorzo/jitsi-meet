@@ -149,7 +149,7 @@ MiddlewareRegistry.register(({ dispatch, getState }) => next => action => {
 
         if (updatedSessionData.status === PENDING
             && (!oldSessionData || oldSessionData.status !== PENDING)) {
-            dispatch(showPendingRecordingNotification(mode));
+            //dispatch(showPendingRecordingNotification(mode));
         } else if (updatedSessionData.status !== PENDING) {
             dispatch(hidePendingRecordingNotification(mode));
 
@@ -158,7 +158,7 @@ MiddlewareRegistry.register(({ dispatch, getState }) => next => action => {
                 if (initiator) {
                     const initiatorName = initiator && getParticipantDisplayName(getState, initiator.getId());
 
-                    initiatorName && dispatch(showStartedRecordingNotification(mode, initiatorName));
+                    //initiatorName && dispatch(showStartedRecordingNotification(mode, initiatorName));
                 } else if (typeof recordingLimit === 'object') {
                     // Show notification with additional information to the initiator.
                     dispatch(showRecordingLimitNotification(mode));
