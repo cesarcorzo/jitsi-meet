@@ -172,14 +172,6 @@ class Labels extends AbstractLabels<Props, State> {
                             && styles.indicatorContainerWide
                     ] }>
                     <TouchableOpacity
-                        onLayout = { this._createOnLayout(LABEL_ID_RECORDING) }
-                        onPress = { this._createOnPress(LABEL_ID_RECORDING) } >
-                        {
-                            this._renderRecordingLabel(
-                                JitsiRecordingConstants.mode.FILE)
-                        }
-                    </TouchableOpacity>
-                    <TouchableOpacity
                         onLayout = { this._createOnLayout(LABEL_ID_STREAMING) }
                         onPress = { this._createOnPress(LABEL_ID_STREAMING) } >
                         {
