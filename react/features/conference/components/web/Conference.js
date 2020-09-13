@@ -192,8 +192,8 @@ class Conference extends AbstractConference<Props, *> {
             _layoutClassName,
             _showPrejoin
         } = this.props;
-        //const hideLabels = filmstripOnly || _iAmRecorder;
-        const hideLabels = true;
+        const hideLabels = filmstripOnly || _iAmRecorder;
+        //const hideLabels = true;
 
         return (
             <div

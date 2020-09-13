@@ -79,17 +79,6 @@ class Labels extends AbstractLabels<Props, State> {
                     this._renderE2EELabel()
                 }
                 {
-                    this._renderRecordingLabel(
-                        JitsiRecordingConstants.mode.FILE)
-                }
-                {
-                    this._renderRecordingLabel(
-                        JitsiRecordingConstants.mode.STREAM)
-                }
-                {
-                    this._renderLocalRecordingLabel()
-                }
-                {
                     this._renderTranscribingLabel()
                 }
                 {
